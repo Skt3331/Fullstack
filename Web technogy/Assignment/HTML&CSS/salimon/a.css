@@ -1,0 +1,21 @@
+*{
+    align-content: center;
+}
+ h1{
+    color: red;
+
+ }
+
+ #main {
+    width: 500px;
+    height: 500px;
+    color: red;
+    background-color: blue;
+    
+ }
+ div{
+ width: 50;
+ height: 50 ;
+ border-radius: 80;
+ }
+
