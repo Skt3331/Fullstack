@@ -54,3 +54,12 @@ app.listen(port,()=>{
                   //       res.send(`welcome ${a.username} `);
                   
                   // });
+
+//Query String
+                //   app.get(("/search"),(req,res)=>
+                //   {
+                //    let {name}=req.query;
+                 //  console.log(q);
+                //    res.send(`this are search requirement ${name}`);
+                //   })
+                
