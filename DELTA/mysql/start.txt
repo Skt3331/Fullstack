@@ -1,0 +1,7 @@
+sudo apt install mysql-server
+ sudo systemctl status mysql.service  //status
+sudo systemctl sstart mysql.service    //sstart
+sudo mysql
+Alter USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+ sudo mysql_secure_installation
+sudo snap install mysql-workbench-community
