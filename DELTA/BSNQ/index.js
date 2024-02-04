@@ -1,94 +1,70 @@
-const {faker} =require('@faker-js/faker');
-const { error } = require('console');
-const { getRandomValues } = require('crypto');
-let createRandomUser=()=>
-{ return{
-    id: faker.string.uuid(),
-    username: faker.internet.userName(),
-    email: faker.internet.email(),
-    // avatar: faker.image.avatar(),
-    password: faker.internet.password()
-    // birthdate: faker.date.birthdate(),
-    // registeredAt: faker.date.past(),
-};};
-
-// it was for return array of user to insert 100 records
-let createRandomUser1=()=>
-{ return[
-   faker.string.uuid(),
-   faker.internet.userName(),
-   faker.internet.email(),
-    // avatar: faker.image.avatar(),
-   faker.internet.password()
-    // birthdate: faker.date.birthdate(),
-    // registeredAt: faker.date.past(),
-];};
-
-console.log(createRandomUser());
-
-// Get the client
+const express = require("express");
 const mysql = require("mysql2");
+const path = require("path");
 
-// Create the connection to database
-try{
+const app = express();
+const port = 7890;
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
+
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  database: 'delta_app',
-  password:"root"
-
+  host: "localhost",
+  user: "root",
+  database: "delta_app",
+  password: "root",
 });
 
-// show all table from database
-// connection.query(
-//   'SHOW TABLES',
-//   function (err, results, fields) {
-//     console.log(results); // results contains rows returned by server
-//     console.log(fields); // fields contains extra meta data about results, if available
-//   }
-// );
-// connection.query(`select * from user`),function(err,results,fields)
-// {
-//     console.log(err);
-//     console.log(results);
-//     console.log(fields);
-// }
-
-// //withplaceholders
-
-// let q="Insert into user(id,username,email,password) values(?,?,?,?)";
-//  let cr=createRandomUser();
-//  let user=[cr.id,cr.username,cr.email,cr.password];
-  
-//  connection.query(q,user,(err,results)=>
-//  {
-//  if(err) throw err;
-//  console.log(results);
-//  });
- 
-
-
-
-// using faker bulk insert
-
-
-let data=[];
-
-let q="Insert into user(id,username,email,password) values ?";
-for(let i=0;i<100;i++)
-{
-    data.push(createRandomUser1());
-}
-
-
-// console.log(records);
-connection.query(q,[data],(err,result)=>
-{
-    console.log(err);
-    console.log(result);
+connection.connect((err) => {
+  if (err) {
+    console.error("Error connecting to database:", err);
+    return;
+  }
+  console.log("Connected to database");
 });
-}
 
-catch(err){
-console.log(err);
-}
+// Start the server
+app.listen(port, () => {
+  console.log("Server is listening on port", port);
+});
+
+// Home
+app.get("/", (req, res) => {
+  let q = `SELECT COUNT(*) AS count FROM user;`;
+  connection.query(q, (err, result) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    let counts = result[0]["count"];
+    console.log(result[0]["count"]);
+    res.render("home", { counts });
+  });
+});
+
+// Show records
+app.get("/user", (req, res) => {
+  let q = 'SELECT id, username, password FROM user';
+  connection.query(q, (err, result) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.render("user", { users: result });
+  });
+});
+
+// Close the database connection when the server is shut down
+process.on("SIGINT", () => {
+  console.log("Closing database connection...");
+  connection.end((err) => {
+    if (err) {
+      console.error("Error closing database connection:", err);
+      return;
+    }
+    console.log("Database connection closed");
+    process.exit();
+  });
+});
