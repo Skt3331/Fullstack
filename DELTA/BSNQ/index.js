@@ -82,42 +82,82 @@ app.get("/user/:id/edit",(req,res)=>
 });
 //update route
 
-app.patch("/user/:id",(req,res)=>
-{
-  let {id}=req.params;
-  let {username,password}=req.body;
-  // let q = `select (id) from user where password="${password}"`;
-  let q=`select * from user where id="${id}"`
+// app.patch("/user/:id",(req,res)=>
+// {
+//   let {id}=req.params;
+//   let {username,password}=req.body;
+//   // let q = `select (id) from user where password="${password}"`;
+//   let q=`select * from user where id="${id}"`
 
-  connection.query(q, (err, result) => {
+//   connection.query(q, (err, result) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       res.status(500).send("Internal Server Error");
+//       return;
+      
+//     }
+//     if(result.password==password)
+//     {
+//       let q=`update user SET username="${username} where id='${id}'`;
+
+//   connection.query(q, (err, result) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       res.status(500).send("Internal Server Error");
+//       return;
+      
+//     }
+//     res.send("updated");
+//     });}
+//   console.log(id,username,password,result);
+
+//     res.send("done");
+// });
+
+
+// })
+
+
+app.patch("/user/:id", (req, res) => {
+  const { id } = req.params;
+  const { username, password } = req.body;
+  
+  // Use parameterized query to prevent SQL injection
+  const q = "SELECT * FROM user WHERE id = ?";
+  
+  connection.query(q, [id], (err, result) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).send("Internal Server Error");
       return;
-      
     }
-    if(result.password==password)
-    {
-      let q=`update user SET username="${username} where id='${id}'`;
 
-  connection.query(q, (err, result) => {
-    if (err) {
-      console.error("Error executing query:", err);
-      res.status(500).send("Internal Server Error");
+    // Check if a user with the provided id exists
+    if (result.length === 0) {
+      res.status(404).send("User not found");
       return;
-      
     }
-    res.send("updated");
-    });}
-  console.log(id,username,password,result);
 
-    res.send("done");
-});
-
-
-})
-
-
+    // Compare the password from the database with the provided password
+    console.log(result[0].password ,"------",password)
+    if (result[0].password === password) {
+  
+      // Use parameterized query for the update to prevent SQL injection
+      const updateQuery = "UPDATE user SET username = ? WHERE id = ?";
+      
+      connection.query(updateQuery, [username, id], (err, result) => {
+        if (err) {
+          console.error("Error executing update query:", err);
+          res.status(500).send("Internal Server Error");
+          return;
+        }
+       res.redirect("/user")
+      });
+    } else {
+      res.status(401).send("Invalid password");
+    }
+  });
+}); 
 
 
 
