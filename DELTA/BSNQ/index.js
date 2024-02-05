@@ -8,6 +8,10 @@ const port = 7890;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
+const methodOverride =require("method-override");
+app.use(methodOverride("_method"));
+app.use(express.urlencoded({extended:true}));
+
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -45,16 +49,89 @@ app.get("/", (req, res) => {
 
 // Show records
 app.get("/user", (req, res) => {
-  let q = 'SELECT id, username, password FROM user';
+  let q = 'SELECT id, username, email FROM user';
+  connection.query(q, (err, users) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).send("Internal Server Error");
+      return;
+      
+    }
+    // console.log(users);
+    res.render("user", { users });
+  });
+});
+
+app.get("/user/:id/edit",(req,res)=>
+{
+  let {id}=req.params;
+  let q = `SELECT id ,username FROM user where id="${id}"`;
+  connection.query(q, (err, users) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).send("Internal Server Error");
+      return;
+      
+    }console.log(users);
+    res.render("edit", { users });
+  
+
+    // res.send("done");
+  });
+
+});
+//update route
+
+app.patch("/user/:id",(req,res)=>
+{
+  let {id}=req.params;
+  let {username,password}=req.body;
+  // let q = `select (id) from user where password="${password}"`;
+  let q=`select * from user where id="${id}"`
+
   connection.query(q, (err, result) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).send("Internal Server Error");
       return;
+      
     }
-    res.render("user", { users: result });
-  });
+    if(result.password==password)
+    {
+      let q=`update user SET username="${username} where id='${id}'`;
+
+  connection.query(q, (err, result) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).send("Internal Server Error");
+      return;
+      
+    }
+    res.send("updated");
+    });}
+  console.log(id,username,password,result);
+
+    res.send("done");
 });
+
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Close the database connection when the server is shut down
 process.on("SIGINT", () => {
