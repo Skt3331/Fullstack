@@ -1,0 +1,89 @@
+
+echo "deb http://security.ubuntu.com/ubuntu focal-security main" | sudo tee /etc/apt/sources.list.d/focal-security.list
+
+sudo apt-get update
+sudo apt-get install libssl1.1
+sudo dpkg -i mongodb-org-server_7.0.5_amd64.deb
+skt@skt:~/Downloads$ mongod --version
+
+db version v7.0.5
+Build Info: {
+    "version": "7.0.5",
+    "gitVersion": "7809d71e84e314b497f282ea8aa06d7ded3eb205",
+    "openSSLVersion": "OpenSSL 1.1.1f  31 Mar 2020",
+    "modules": [],
+    "allocator": "tcmalloc",
+    "environment": {
+        "distmod": "ubuntu2004",
+        "distarch": "x86_64",
+        "target_arch": "x86_64"
+    }
+}
+skt@skt:~/Downloads$ sudo systemctrl status mongod
+
+
+
+skt@skt:~/Downloads$ sudo systemctl status mongod
+
+○ mongod.service - MongoDB Database Server
+     Loaded: loaded (/lib/systemd/system/mongod.service; disabled; vendor prese>
+     Active: inactive (dead)
+       Docs: https://docs.mongodb.org/manual
+lines 1-4/4 (END)
+skt@skt:~/Downloads$ sudo systemctl start mongod
+skt@skt:~/Downloads$ sudo systemctl status mongod
+● mongod.service - MongoDB Database Server
+     Loaded: loaded (/lib/systemd/system/mongod.service; disabled; vendor prese>
+     Active: active (running) since Tue 2024-02-06 00:17:49 IST; 3s ago
+       Docs: https://docs.mongodb.org/manual
+   Main PID: 14976 (mongod)
+     Memory: 72.8M
+        CPU: 176ms
+     CGroup: /system.slice/mongod.service
+             └─14976 /usr/bin/mongod --config /etc/mongod.conf
+
+Feb 06 00:17:49 skt systemd[1]: Started MongoDB Database Server.
+Feb 06 00:17:49 skt mongod[14976]: {"t":{"$date":"2024-02-05T18:47:49.362Z"},"s>
+lines 1-12/12 (END)
+
+
+skt@skt:~/Downloads$ mongosh
+mongosh: command not found
+skt@skt:~/Downloads$ sudo apt install mongodb-mongosh
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following NEW packages will be installed:
+  mongodb-mongosh
+0 upgraded, 1 newly installed, 0 to remove and 1 not upgraded.
+Need to get 48.7 MB of archives.
+After this operation, 224 MB of additional disk space will be used.
+Get:1 http://repo.mongodb.org/apt/debian bullseye/mongodb-org/7.0/main amd64 mongodb-mongosh amd64 2.1.3 [48.7 MB]
+Fetched 48.7 MB in 5s (9,428 kB/s)          
+Selecting previously unselected package mongodb-mongosh.
+(Reading database ... 344311 files and directories currently installed.)
+Preparing to unpack .../mongodb-mongosh_2.1.3_amd64.deb ...
+Unpacking mongodb-mongosh (2.1.3) ...
+Setting up mongodb-mongosh (2.1.3) ...
+Processing triggers for man-db (2.10.2-1) ...
+skt@skt:~/Downloads$ mongosh
+Current Mongosh Log ID:	65c12f0bb65cce6367216329
+Connecting to:		mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.3
+Using MongoDB:		7.0.5
+Using Mongosh:		2.1.3
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+
+To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+------
+   The server generated these startup warnings when booting
+   2024-02-06T00:17:49.446+05:30: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2024-02-06T00:17:49.580+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2024-02-06T00:17:49.580+05:30: vm.max_map_count is too low
+------
+
+test> 
+
