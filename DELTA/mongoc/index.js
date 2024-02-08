@@ -45,19 +45,39 @@ const user2=new user({name:"vishal",email:"vaisshale@gmail.com",age:34});
 //     console.log(err);
 // })
 //show all records
-user.find().then((res)=>
-{
-console.log(res);
-});
+// user.find().then((res)=>
+// {
+// console.log(res);
+// });
 
 
-//show filtered records
-user.findOne({age:{$gt:32}}).then((res)=>
-{
+// //show filtered records
+// user.find({age:{$gt:32}}).then((res)=>
+// {
+//     console.log(res);
+// }).catch((err)=>
+// {
+//     console.log(err);
+// });
+
+ //show filters one recored
+
+
+ // user.findOne({age:{$gt:32}}).then((res)=>
+// {
+//     console.log(res);
+// }).catch((err)=>
+// {
+//     console.log(err);
+// });
+
+ user.findById("65c3bd870b12f510c40dfe90").then((res)=>
+ {
     console.log(res);
-}).catch((err)=>
-{
+ })
+ .catch((err)=>
+ {
     console.log(err);
-});
+ })
 
 

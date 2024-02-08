@@ -1,0 +1,66 @@
+1. Connecting to MongoDB:
+
+JavaScript
+const MongoClient = require('mongodb').MongoClient;
+
+const url = 'mongodb://localhost:27017';
+const dbName = 'myDatabase';
+
+MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(client => {
+    const db = client.db(dbName);
+    // Perform database operations here
+  })
+  .catch(err => {
+    console.error(err);
+  });
+Use code with caution. Learn more
+2. Creating a Document:
+
+JavaScript
+const collection = db.collection('users');
+
+const user = { name: 'John Doe', age: 30 };
+
+collection.insertOne(user, (err, result) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(`Document inserted with ID: ${result.insertedId}`);
+  }
+});
+Use code with caution. Learn more
+3. Finding a Document:
+
+JavaScript
+collection.findOne({ name: 'John Doe' }, (err, document) => {
+  if (err) {
+    console.error(err);
+  } else if (document) {
+    console.log('Document found:', document);
+  } else {
+    console.log('Document not found.');
+  }
+});
+Use code with caution. Learn more
+4. Updating a Document:
+
+JavaScript
+collection.updateOne({ name: 'John Doe' }, { $set: { age: 35 } }, (err, result) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(`Documents updated: ${result.matchedCount}`);
+  }
+});
+Use code with caution. Learn more
+5. Deleting a Document:
+
+JavaScript
+collection.deleteOne({ name: 'John Doe' }, (err, result) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(`Documents deleted: ${result.deletedCount}`);
+  }
+});
