@@ -1,0 +1,8 @@
+data2 <- read_csv("airquality.csv")
+head(data2$Ozone)
+tail(data2$Wind)
+is.na(data2$Ozone)
+is.na(data2$Day)
+is.na(head(data2$rownames,4))
+is.na(tail(data2$Temp,6))
+sum(data2$Temp,6)
