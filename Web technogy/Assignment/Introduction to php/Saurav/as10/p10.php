@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Display Employee Details</title>
+    <title>Display Emploee Details</title>
 </head>
 <body>
     <h1>Employee Details</h1>
