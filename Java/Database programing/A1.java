@@ -12,20 +12,7 @@ public class A1 {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             System.out.println("PostgreSQL JDBC driver not found.");
-            e.printStackTrace();saurav=# ;
-saurav=# CREATE TABLE person (
-saurav(#     PID SERIAL PRIMARY KEY,
-saurav(#     name VARCHAR(255) NOT NULL,
-saurav(#     gender VARCHAR(10),
-saurav(#     birth_year INTEGER
-saurav(# );
-CREATE TABLE
-saurav=# INSERT INTO person (name, gender, birth_year) VALUES
-saurav-#     ('Ravi Kumar', 'Male', 1992),
-saurav-#     ('Priya Patel', 'Female', 1988),
-saurav-#     ('Amit Sharma', 'Male', 1995);
-INSERT 0 3
-saurav=# 
+            e.printStackTrace();
 
 
             return;
@@ -76,24 +63,7 @@ saurav=#
             System.out.println("Result display failed.");
             e.printStackTrace();
             return;
-        }saurav=# ;
-saurav=# CREATE TABLE person (
-saurav(#     PID SERIAL PRIMARY KEY,
-saurav(#     name VARCHAR(255) NOT NULL,
-saurav(#     gender VARCHAR(10),
-saurav(#     birth_year INTEGER
-saurav(# );
-CREATE TABLE
-saurav=# INSERT INTO person (name, gender, birth_year) VALUES
-saurav-#     ('Ravi Kumar', 'Male', 1992),
-saurav-#     ('Priya Patel', 'Female', 1988),
-saurav-#     ('Amit Sharma', 'Male', 1995);
-INSERT 0 3
-saurav=# 
-
-
-
-        
+        }        
         try {
             resultSet.close();
             statement.close();
