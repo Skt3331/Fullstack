@@ -4,6 +4,8 @@ const mongoose=require("mongoose");
 const Listing=require("./models/listing.js");
 const path=require("path");
 
+app.use(express.urlencoded({extended:true}));
+
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 
@@ -13,14 +15,27 @@ app.get("/",(req,res)=>
  res.send("runing");
 });
 
+
+///index route
 app.get("/listings",(async(req,res)=>
 {
 const alllistings=await Listing.find({});
 res.render("./listings/index.ejs",{alllistings})
 
 }))
+app.get("/listings/new",async(req,res)=>
+{
+    res.render("listings/new.ejs")
+})
 
+//show route
+app.get("/listings/:id",async (req,res)=>
+{
+    let {id} =req.params;
+    const listing= await Listing.findById(id);
+    res.render("./listings/show.ejs",{listing});
 
+})
 
 
 
