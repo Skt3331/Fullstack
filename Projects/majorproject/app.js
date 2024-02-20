@@ -10,13 +10,30 @@ app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 
 const methodOverride=require("method-override");
+const { read } = require("fs");
 app.use(methodOverride("_method"));
+
+
+const ejsmate=require("ejs-mate");
+
+
 
 
 app.get("/",(req,res)=>
 {
  res.send("runing");
 });
+
+
+
+
+
+
+
+
+
+
+
 //update route
 app.put("/listings/:id",async(req,res)=>
 {
@@ -24,7 +41,23 @@ app.put("/listings/:id",async(req,res)=>
  let done=await Listing.findByIdAndUpdate(id,{...req.body.listing});
 //  console.log(done);
 res.redirect("/listings")
-})
+});
+
+
+
+
+
+//delete routing
+app.delete("/listings/:id",async(req,res)=>
+{
+    let {id}=req.params;
+    let deletedlisting =await Listing.findByIdAndDelete(id);
+    console.log(deletedlisting);
+    res.redirect("/listings");
+   
+
+});
+
 
 
 ///index route
@@ -67,8 +100,7 @@ app.get("/listings/:id/edit",async(req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id);
     res.render("./listings/edit.ejs",{listing});
-})
-
+});
 
 
 // app.get("/test",async (req,res)=>{
@@ -106,7 +138,7 @@ main().then(()=>{
 }).catch((err)=>
 {
     console.log(err);
-})
+});
 
 
 

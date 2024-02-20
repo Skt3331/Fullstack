@@ -13,6 +13,10 @@
         <li>&#x20B9 <%=listing.price.toLocaleString("en-in") %></li>
         <li><%=listing.location %></li>
         <li><%=listing.country %></li>
-        <a href="/listings/<%=listing._id%>/edit">edit</a>    </ul>
+        <a href="/listings/<%=listing._id%>/edit">edit</a> 
+        <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+        <button > Delete</button>
+            
+        </form> </ul>
 </body>
 </html>
