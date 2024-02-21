@@ -16,6 +16,11 @@ app.use(methodOverride("_method"));
 
 const ejsmate=require("ejs-mate");
 
+app.engine("ejs",ejsmate); 
+
+
+
+app.use(express.static(path.join(__dirname,"/public")));
 
 
 
