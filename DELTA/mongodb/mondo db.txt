@@ -1,0 +1,352 @@
+// to see all existing dbs 
+// -- show databases
+
+// to create or select a new database 
+// -- use db_name
+
+// to create a collection 
+// -- db.createCollection('coll_name')
+
+// to insert document in collection
+// -- db.collectionName.insert({})
+
+// to insert multiple records 
+// -- db.collectionName.insertMany([{},{},{}])
+
+// to delete a record 
+// -- db.collectionName.deleteOne({name:"Iphone14"})
+// -- db.collectionName.deleteMany({})
+
+// to upadate a record 
+// -- db.collectionName.updateOne({_id: ObjectId('65cc90900eb3a255e36882e3')},{$set:{price:1100}})
+
+// -- db.products.updateOne(
+//     {name:"TV Remote"},
+//     {$set:{price:100}},
+//     {upsert:true}
+//     )
+
+// to view data from a collection 
+-- db.collectionName.find()
+
+// to apply a condition
+// -- db.collectionName.find({cond1,cond2...})
+
+// query ops
+
+// comparison ops / relational 
+// $gt $lt $gte $lte $eq $ne
+
+// $in : [] $nin:[]
+
+-- db.collectionName.find({price:{$gt:300}})
+
+
+// logical ops 
+
+// $and , $or 
+
+db.collectionName.find({condq,cond2,cond3})
+
+-- db.collectionName.find(
+    {
+        $and:[{},{},{},{}]
+    }
+)
+
+
+db.products.find({
+    $and:[
+        {price:{$gt:1000}},
+        {quantity:{$lt:100}}
+        ]
+    })
+
+    db.products.find({
+    $or:[
+        {price:{$gt:1000}},
+        {quantity:{$lt:100}}
+        ]
+    })
+
+
+// to limit 
+
+db.collectionName.find().limit(count)
+
+// to skip 
+
+db.collectionName.find().limit(count).skip(count)
+
+
+// cto get count of docs 
+
+db.collectionName.countDocuments()
+
+
+// projection 
+
+db.collectionName.find({},{name:1})
+
+// to sort 
+
+db.collectionName.find().sort({price:[1,-1],key:value})
+
+//to drop a collection 
+
+db.collectionName.drop()
+
+
+[
+
+{}
+
+]
+
+
+// mongo collection schema 
+
+
+db.createCollection("products",{
+    validator:{
+        $jsonSchema:{
+            bsonType:"object",
+            required:["name","price","code","category"],
+            properties:{
+                name:{
+                    bsonType:"string",
+                    description:"Name Should be a string",
+                    minLength:2
+                },
+                price:{
+                    bsonType:"int",
+                    minimum:10,
+                    maximum:1000
+
+                },
+                code:{
+                    bsonType:"string",
+                    minLength:3,
+                    maxLength:5,
+                    pattern:"^[A-Z]{2}[0-9]{1,3}$"
+                    
+                },
+                vendors:{
+                    bsonType:"array",
+                    minItems:1,
+                    maxItems:3,
+                    items:{
+                        bsonType:"string",
+
+                    }
+                },
+                category:{
+                    bsonType:"string",
+                    enum:["Clothing","Electronics","Appliances"]
+
+                    
+                },
+                
+
+            }
+
+        }
+    }
+})
+
+
+
+// $match 
+// $group [$sum,$avg,$min,$max]
+// $lookup
+// $sort 
+// $project
+// $unwind
+// $out
+
+
+// db.products.find({price:{$gt:500}})
+
+// select sum(price) as totalfrom table 
+
+
+
+
+
+// sum without grouping 
+
+db.products.aggregate([
+
+   {$group:{_id:null,total:{$sum:"$price"}}}
+
+])
+
+
+// sum grouped byb category 
+
+db.products.aggregate([
+
+    {$group:{_id:'$category',total:{$sum:"$price"}}}
+ 
+ ])
+
+
+ // avg grouped byb category 
+
+db.products.aggregate([
+
+    {$group:{_id:'$category',total:{$avg:"$price"}}}
+ 
+ ])
+
+
+
+
+
+//  getting list of products names based on category 
+
+
+db.products.aggregate([
+
+    {$group:{_id:'$category', names:{$push:"$name"}}}
+ 
+ ])
+
+
+//  getting list of objects with multiple props based on category 
+db.products.aggregate([
+
+    {$group:{_id:'$category', names:{$push:{name:"$name",pr:"$price"}}}}
+ 
+ ])
+
+
+ db.products.aggregate([
+
+    {$group:{_id:'$category', names:{$push:"$$ROOT"}}}
+ 
+ ])
+
+
+
+ db.products.aggregate([
+
+    {$group:{_id:'$category', totalPrice:{$sum:"$price"} ,products:{$push:{name:"$name",pr:"$price"}}}},
+    {$match:{totalPrice:{$gt:1000}}}
+ 
+ ])
+
+//  unwind 
+
+
+db.products.aggregate([
+    {$match:{category:"Electronics"}},
+    {$out:"elec_prods"}
+])
+
+
+// relationships 
+
+
+// embed 
+
+
+// department 
+
+db.departments.insertMany([
+    {name:"IT"},
+    {name:"Sales"},
+    {name:"Marketing"}
+])
+
+db.employees.insertOne({name:"Shobha",age:22})
+
+
+// aggregatation 
+
+
+// select * from  
+// department d inner join employees e
+//on d.id = e.depid
+
+
+// select * from 
+// department d , employees e
+// where d.id = e.depid
+
+
+db.employees.aggregate([
+
+    {
+        $lookup:{
+            from:"departments",
+            localField:"depid",
+            foreignField:"_id",
+            as:"department"
+        }
+    },
+    {$unwind:"$department"}
+
+   
+
+])
+
+
+
+
+db.subjects.insertMany([
+    {name:"Science"},
+    {name:"Maths"},
+    {name:"C++"}
+])
+
+
+db.students.insertMany([
+    {name:"Saurabh",age:23,subjects:[ ObjectId('65d473e74b88efe26fc65bd0'), ObjectId('65d473e74b88efe26fc65bd2')]},
+    {name:"Chetan",age:27,subjects:[ ObjectId('65d473e74b88efe26fc65bd0'), ObjectId('65d473e74b88efe26fc65bd1')]},
+    {name:"Harsh",21,subjects:[ObjectId('65d473e74b88efe26fc65bd1')]}
+])
+
+
+
+
+
+
+
+
+db.students.aggregate([
+    {
+        $lookup:{
+            from:"subjects",
+            localField:"subjects",
+            foreignField:"_id",
+            as:"subjects"
+        }
+    },
+    
+])
+
+
+
+db.orders.aggregate([
+
+    {
+        $lookup:{
+            from:"customers",
+            localField:"customer_id",
+            foreignField:"_id",
+            as:"customers"
+        }
+    },
+    {
+        $lookup:{
+            from:"products",
+            localField:"product_id",
+            foreignField:"_id",
+            as:"products"
+        }
+    },
+    {$match:{}}
+    
+
+])
