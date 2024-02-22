@@ -1,5 +1,8 @@
 <% layout("/layout/boilerplate") %>
     <h3>Edit </h3>
+
+    <div class="row">
+        <div class="col-8 offset-2" mt-3>
     <form action="/listings/<%=listing._id%>?_method=PUT" method="post">
         <div class="mb-3">
             <lable for="title" class="from-lable">Titile</lable>
@@ -17,8 +20,8 @@
         </div>
 
         <div class="mb-3">
-            <lable for="image" class="from-lable">Image</lable>
-            <input type="text" value="<%=listing.image.url %>" name="listing[image]" placeholder="enter url"
+            <lable for="image.url" class="from-lable">Image</lable>
+            <input type="text" value="<%=listing.image.url %>" name="listing[image.url]" placeholder="enter url"
                 class="from-control">
 
         </div>
@@ -29,23 +32,24 @@
                 class="from-control">
 
         </div>
+  <div class="row">
 
-        <div class="mb-3">
+        <div class="mb-3 col-md-4">
             <lable for="location" class="from-lable">Location</lable>
             <input type="text" value="<%=listing.location %>" name="listing[location]" placeholder="enter location"
                 class="from-control">
         </div>
 
                 
-        <div class="mb-3"> 
+        <div class="mb-3 col-mdn-4"> 
             <lable for="country" class="from-lable">Country</lable>
             <input type="text" value="<%=listing.country %>" name="listing[country]"
                 placeholder="enter country" class="from-control">
         </div>
+</div>
+
+        <button class="btn btn-dark edit-btn mb-3" type="submit">Edit</button>
+</div>
 
 
-        <button class="btn btn-dark edit-btn" type="submit">Edit</button>
-
-
-
-    </form>
+    </form></div>

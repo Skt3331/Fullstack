@@ -1,7 +1,7 @@
 body{
     font-family: "Plus Jakarta Sans", sans-serif !important;
-    /* display: flex; */
-    /* flex-direction: columnm; */
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
 }
 .container{
@@ -85,3 +85,13 @@ text-decoration: none;
     border: none !important;
 }
 
+.form-control{
+    width: auto !important;
+}
+.show-image{
+    height: 40vh;
+}
+
+.show-btns{
+    display: flex;
+}
