@@ -1,7 +1,7 @@
 import java.sql.*;
 import java.io.*;
 
-public class Q6
+public class A6
 {
   public static void main(String args[])
   {
@@ -11,7 +11,7 @@ public class Q6
 	  Connection conn=null ; 
 	  Statement stmt=null; 
 
-       Connection con = DriverManager.getConnection("jdbc:postgresql:fo110","postgres", "");
+       Connection con = DriverManager.getConnection("jdbc:postgresql:saurav","postgres", "");
 
 
 	  if(con==null)

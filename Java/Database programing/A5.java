@@ -44,3 +44,21 @@ public class A5 {
     }
   }
 }
+
+
+
+// -- Create the Person table
+// CREATE TABLE Person (
+//     PID SERIAL PRIMARY KEY,
+//     name VARCHAR(255),
+//     gender VARCHAR(10),
+//     birthyear INT
+// );
+
+// -- Insert some sample Indian data into the Person table
+// INSERT INTO Person (name, gender, birthyear) VALUES
+// ('Rahul Gupta', 'male', 1985),
+// ('Priya Patel', 'female', 1990),
+// ('Aarav Singh', 'male', 2002),
+// ('Sneha Sharma', 'female', 1995),
+// ('Vikram Malhotra', 'male', 1988);

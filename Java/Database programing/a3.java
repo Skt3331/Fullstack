@@ -91,3 +91,15 @@ public class a3 {
     }
 }
 
+// CREATE TABLE Country (
+//     Name VARCHAR(255) PRIMARY KEY,
+//     Continent VARCHAR(255),
+//     Capital VARCHAR(255),
+//     Region VARCHAR(255)
+// );
+
+// INSERT INTO Country (Name, Continent, Capital, Region) VALUES 
+// ('India', 'Asia', 'New Delhi', 'South'),
+// ('United States', 'North America', 'Washington, D.C.', 'North'),
+// ('Brazil', 'South America', 'Brasília', 'South'),
+// ('Spain', 'Europe', 'Madrid', 'West');

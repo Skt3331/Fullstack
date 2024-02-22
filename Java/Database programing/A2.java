@@ -83,3 +83,10 @@ public class A2 {
     }
 }
 
+// CREATE TABLE Person (
+//     id SERIAL PRIMARY KEY,
+//     first_name VARCHAR(50),
+//     last_name VARCHAR(50),
+//     age INT,
+//     email VARCHAR(100)
+// );

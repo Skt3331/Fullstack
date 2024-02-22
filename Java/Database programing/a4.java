@@ -43,3 +43,10 @@ public class a4 {
         scanner.close();
     }
 }
+
+
+// CREATE TABLE Employee (
+//     ID SERIAL PRIMARY KEY,
+//     name VARCHAR(255),
+//     salary NUMERIC(10, 2)
+// );
