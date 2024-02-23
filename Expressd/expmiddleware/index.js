@@ -36,18 +36,67 @@ const app= express();
 
 
 //logger
-//to log th the useful information display
+//to log th the useful information display  
 
-app.use((req,res,next)=>{
-    req.responseTime=new Date(Date.now()).toString();
-    console.log(req.method,req.path,req.responseTime,req.hostname);
-    next();
-})
+// app.use((req,res,next)=>{
+//     req.responseTime=new Date(Date.now()).toString();
+//     console.log(req.method,req.path,req.responseTime,req.hostname);
+// //     GET /random/sadfkasd Fri Feb 23 2024 12:59:47 GMT+0530 (India Standard Time) localhost
+// // POST /posts/ba149d07-fb95-4b36-a164-bb7d3b2d9fdf/edit Fri Feb 23 2024 13:00:35 GMT+0530 (India Standard Time) localhost
+// // PATCH /posts/ba149d07-fb95-4b36-a164-bb7d3b2d9fdf/edit Fri Feb 23 2024 13:00:42 GMT+0530 (India Standard Time) localhost
+// // PATCH /posts/ba149d07-fb95-4b36-a164-bb7d3b2d9fdf/edit Fri Feb 23 2024 13:00:43 GMT+0530 (India Standard Time) localhost
+// // DELETE /posts/ba149d07-fb95-4b36-a164-bb7d3b2d9fdf/edit Fri Feb 23 2024 13:00:47 GMT+0530 (India Standard Time) localhost
+//     next();
+// })
 
-app.get("/",(req,res)=>
+//token authontication using middleware
+
+// app.use("/root",(req,res,next)=>
+// {
+// let {token}=req.query;
+// if(token==="giveacess")
+// {
+//     // http://localhost:8080/root?token=giveacess
+//     next();
+// }
+// else{
+//     res.send("acess denied");
+//     // http://localhost:8080/root
+// }
+// });
+
+
+// app.get("/root",(req,res)=>
+// {
+//     res.send("data");
+// });
+
+///// passing multiple middleware 
+
+const authtoken=((req,res,next)=>
 {
-    res.send("/path");
+let {token}=req.query;
+console.log(token);
+if(token==="giveacess")
+
+{
+    next();
+}
+else{
+    res.send("acess denied");
+}
 });
+
+// here was passed a middleware in a function
+app.get("/root",authtoken,(req,res)=>
+{
+    res.send("data");
+});
+
+
+
+
+
 
 
 
