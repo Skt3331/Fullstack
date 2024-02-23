@@ -1,0 +1,16 @@
+{
+  "name": "errorhandling",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "saurav",
+  "license": "ISC",
+  "dependencies": {
+    "expess": "0.0.1-security",
+    "node": "^21.6.2",
+    "nodemon": "^3.1.0"
+  }
+}
