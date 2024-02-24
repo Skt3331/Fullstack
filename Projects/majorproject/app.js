@@ -28,6 +28,9 @@ app.use(express.static(path.join(__dirname,"/public")));
 const wrapAsync=require("./utils/wrapAsync.js");          //import wrap async function
 
 const ExpressError=require("./utils/ExpressError.js");    //import Express constructor
+const { Console } = require("console");
+
+const {listingShema}=require("./Schema.js");              // npm joi schema validation 
 
 app.get("/",(req,res)=>
 {
@@ -69,14 +72,30 @@ app.post("/listings",wrapAsync(async(req,res,next)=>
     // let {title,description,image,price,country}=req.body;
     // let listing=req.body.listing;
     // console.log(listing);\
-try{
+
      const newlisting=new Listing(req.body.listing);
-    await newlisting.save();
+    //  if(!newlisting.title|!newlisting.description|!newlisting.image|!newlisting.country|!newlisting.location)
+    //  {
+    //  throw new ExpressError(544,"invalid all input fiels are required");
+    //  }
+    //  else
+    //  {
+
+    let result=listingShema.validate(req.body);
+    console.log(result);
+       await newlisting.save();
     res.redirect("/listings");
-}catch(err)                                            /// if any wrong format of data is occure the error of app.use(middleware will trigger)
-{
-    next(err);
-}}));
+     }
+     
+));
+
+// //line 72 or
+// if(!req.body.listing)
+// {
+//     throw new ExpressError(399,"listong not found");d   //it will return th ecustom error that eill display on the page
+// }else{
+//     //reaming code
+// }
 
 
 
@@ -140,11 +159,16 @@ app.all("*",(req,res,next)=>
 
                                                          // All request will go throw this route if ant errr will occcure this response will send
 app.use((err,req,res,next)=>{
-    let {statusCode,message}=err;                    
-    res.status(statusCode).send(message);               //it will show the error message only and statuscode in console
-    // res.send("something went wrong");                    //new blank page res
+    let {statusCode=400,message="not found"}=err;                     //using == set deafult value to the variable 
+    // res.status(statusCode).send(message);               //it will show the error message only and statuscode in console
+    // res.send("something went wrong");          //new blank page res
+    // res.render("./listings/error.ejs");          
+    res.status(504).render("./listings/error"); 
+    console.log(message);
+     //POST http://localhost:8099/listings 504 (Gateway Timeout)
+    next();
 });
-
+ 
 
 app.listen(8099,()=>{
     console.log("server is listing");
