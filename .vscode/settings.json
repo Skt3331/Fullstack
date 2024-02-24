@@ -1,4 +1,7 @@
 {
     "workbench.editor.centeredLayoutFixedWidth": true,
-    "workbench.editor.splitInGroupLayout": "vertical"
+    "workbench.editor.splitInGroupLayout": "vertical",
+    "editor.tokenColorCustomizations": {
+        "comments": "#ffffff"
+    },
 }

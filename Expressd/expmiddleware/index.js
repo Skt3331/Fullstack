@@ -31,6 +31,8 @@ const app= express();
 //     console.log("calling secound middleware");
 //     next();
 // });
+
+
 // after the execution of this middleware
 //all next processes run ass it is
 
@@ -62,6 +64,8 @@ const app= express();
 // else{
 //     res.send("acess denied");
 //     // http://localhost:8080/root
+//throw custom exception
+      //throw new Error("Acess Denied!");
 // }
 // });
 
