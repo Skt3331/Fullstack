@@ -74,17 +74,19 @@ res.render("./listings/index.ejs",{alllistings})
 })); 
 
 //create route
-app.post("/listings",async(req,res)=>
+app.post("/listings",async(req,res,next)=>
 {
     // let {title,description,image,price,country}=req.body;
     // let listing=req.body.listing;
     // console.log(listing);\
-
-    const newlisting=new Listing(req.body.listing);
+try{
+     const newlisting=new Listing(req.body.listing);
     await newlisting.save();
     res.redirect("/listings");
-;    
-});
+}catch(err)  /// if any wrong format of data is occure the error of app.use(middleware will trigger)
+{
+    next(err);
+}});
 
 
 app.get("/listings/new",async(req,res)=>
@@ -147,9 +149,10 @@ main().then(()=>{
 
 
 
-
-
-
+// All request will go throw this route if ant errr will occcure this response will send
+app.use((err,req,res,next)=>{
+    res.send("something went wrong");
+});
 
 
 app.listen(8099,()=>{
