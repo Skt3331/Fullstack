@@ -1,20 +1,23 @@
-const express=require("express");
-const app=express();
-const mongoose=require("mongoose");
-const Listing=require("./models/listing.js");
+const express=require("express");                             //require express
+const app=express();                                          // express function 
+const mongoose=require("mongoose");                           // require mongodb use nvm node 18 +version
+
+const Listing=require("./models/listing.js");         
 const path=require("path");
 
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({extended:true}));                 //uncode req.body means post request content
 
-app.set("view engine","ejs");
-app.set("views",path.join(__dirname,"views"));
+app.set("view engine","ejs");                                // set view as express java script
+app.set("views",path.join(__dirname,"views"));               // benifits of join path the progrma can run from any path the view path in program remains constant
+        
 
-const methodOverride=require("method-override");
+const methodOverride=require("method-override");            // to mangage post,path,delete request 
+
 const { read } = require("fs");
-app.use(methodOverride("_method"));
+app.use(methodOverride("_method"));                        //it will spacift which name is use to set a method in action tag
 
 
-const ejsmate=require("ejs-mate");
+const ejsmate=require("ejs-mate");                         //ejs mate is to make an boilar plate in program thats include the navigation and 
 
 app.engine("ejs",ejsmate); 
 
@@ -22,7 +25,9 @@ app.engine("ejs",ejsmate);
 
 app.use(express.static(path.join(__dirname,"/public")));
 
+const wrapAsync=require("./utils/wrapAsync.js");          //import wrap async function
 
+const ExpressError=require("./utils/ExpressError.js");    //import Express constructor
 
 app.get("/",(req,res)=>
 {
@@ -30,51 +35,36 @@ app.get("/",(req,res)=>
 });
 
 
-
-
-
-
-
-
-
-
-
 //update route
-app.put("/listings/:id",async(req,res)=>
+app.put("/listings/:id",wrapAsync(async(req,res)=>
 {
  let {id}=req.params;
  let done=await Listing.findByIdAndUpdate(id,{...req.body.listing});
 //  console.log(done);
 res.redirect("/listings")
-});
-
-
-
+}));
 
 
 //delete routing
-app.delete("/listings/:id",async(req,res)=>
+app.delete("/listings/:id",wrapAsync(async(req,res)=>
 {
     let {id}=req.params;
     let deletedlisting =await Listing.findByIdAndDelete(id);
     console.log(deletedlisting);
     res.redirect("/listings");
-   
-
-});
-
-
+}));
+  
 
 ///index route
 app.get("/listings",(async(req,res)=>
 {
 const alllistings=await Listing.find({});
 res.render("./listings/index.ejs",{alllistings})
-
 })); 
 
+
 //create route
-app.post("/listings",async(req,res,next)=>
+app.post("/listings",wrapAsync(async(req,res,next)=>
 {
     // let {title,description,image,price,country}=req.body;
     // let listing=req.body.listing;
@@ -83,31 +73,32 @@ try{
      const newlisting=new Listing(req.body.listing);
     await newlisting.save();
     res.redirect("/listings");
-}catch(err)  /// if any wrong format of data is occure the error of app.use(middleware will trigger)
+}catch(err)                                            /// if any wrong format of data is occure the error of app.use(middleware will trigger)
 {
     next(err);
-}});
+}}));
 
 
-app.get("/listings/new",async(req,res)=>
+
+app.get("/listings/new",wrapAsync(async(req,res)=>
 {
     res.render("listings/new.ejs")
-});
+}));
 
 //show route
-app.get("/listings/:id",async (req,res)=>
+app.get("/listings/:id",wrapAsync(async (req,res)=>
 {
     let {id} =req.params;
     const listing= await Listing.findById(id);
     res.render("./listings/show.ejs",{listing});
 
-});
+}));
 
-app.get("/listings/:id/edit",async(req,res)=>{
+app.get("/listings/:id/edit",wrapAsync(async(req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id);
     res.render("./listings/edit.ejs",{listing});
-});
+}));
 
 
 // app.get("/test",async (req,res)=>{
@@ -130,12 +121,6 @@ app.get("/listings/:id/edit",async(req,res)=>{
 
 // })
 
-
-
-
-
-
-
 async function main()
 {
     await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
@@ -146,12 +131,18 @@ main().then(()=>{
 {
     console.log(err);
 });
+app.all("*",(req,res,next)=>
+{
+     next(new ExpressError(404,"page not found"));          // if path is out of servive the user degiend status and message will be passsed into a Expresserror class 
+    });
 
 
 
-// All request will go throw this route if ant errr will occcure this response will send
+                                                         // All request will go throw this route if ant errr will occcure this response will send
 app.use((err,req,res,next)=>{
-    res.send("something went wrong");
+    let {statusCode,message}=err;                    
+    res.status(statusCode).send(message);               //it will show the error message only and statuscode in console
+    // res.send("something went wrong");                    //new blank page res
 });
 
 
