@@ -1,3 +1,7 @@
+///one to few (one) relation in mongodb
+
+
+
 const mongoose=require("mongoose");
 const {Schema}=mongoose;
 
@@ -13,6 +17,8 @@ const userSchema =new Schema(
         username:String,
         addresses:[
             {
+                ///_id:false,///  if false set ihe id will not generated for each sub schema
+                
              location:String,City:String
             },
 
