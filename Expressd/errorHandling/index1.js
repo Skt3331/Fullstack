@@ -14,21 +14,21 @@ app.get("/admin",(req,res)=>  //create admin route
 })
 
 //Wrap asyncWrap
-function asyncWrap(fn){
-    return function (req,res,next)
-    {
-        fn(req,res,next).catch((err)=>{
-            next(err);
-        })
-    }
-}
-//using above function reduce the code of try catch block it will only use asyncwrap function this function will catch the error and throw 
-app.get("/chats/:id",asyncWrap(async(req,res,next)=>
-{
-    let {id}=req.params;
-    res.send("id",id);
+// function asyncWrap(fn){
+//     return function (req,res,next)
+//     {
+//         fn(req,res,next).catch((err)=>{
+    //             next(err);
+//         })
+//     }
+// }
+// //using above function reduce the code of try catch block it will only use asyncwrap function this function will catch the error and throw 
+// app.get("/chats/:id",asyncWrap(async(req,res,next)=>
+// {
+//     let {id}=req.params;
+//     res.send("id",id);
 
-})); 
+// })); 
 
 
 app.listen("8080",()=>
