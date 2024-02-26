@@ -1,39 +1,39 @@
-const express = require("express"); //require express
-const app = express(); // express function
-const mongoose = require("mongoose"); // require mongodb use nvm node 18 +version
+const express = require("express");                                  //require express
+const app = express();                                               // express function
+const mongoose = require("mongoose");                               // require mongodb use nvm node 18 +version
 
 const Listing = require("./models/listing.js");
 const path = require("path");
 
-app.use(express.urlencoded({ extended: true })); //uncode req.body means post request content
+app.use(express.urlencoded({ extended: true }));                     //uncode req.body means post request content
 
 app.set("view engine", "ejs"); // set view as express java script
-app.set("views", path.join(__dirname, "views")); // benifits of join path the progrma can run from any path the view path in program remains constant
+app.set("views", path.join(__dirname, "views"));                     // benifits of join path the progrma can run from any path the view path in program remains constant
 
-const methodOverride = require("method-override"); // to mangage post,path,delete request
+const methodOverride = require("method-override");                     // to mangage post,path,delete request
 
-const { read } = require("fs");
-app.use(methodOverride("_method")); //it will spacift which name is use to set a method in action tag
+const { read } = require("fs"); 
+app.use(methodOverride("_method"));                                   //it will spacift which name is use to set a method in action tag
 
-const ejsmate = require("ejs-mate"); //ejs mate is to make an boilar plate in program thats include the navigation and
+const ejsmate = require("ejs-mate");                                   //ejs mate is to make an boilar plate in program thats include the navigation and
 
 app.engine("ejs", ejsmate);
 
 app.use(express.static(path.join(__dirname, "/public")));
 
-const wrapAsync = require("./utils/wrapAsync.js"); //import wrap async function
+const wrapAsync = require("./utils/wrapAsync.js");                      //import wrap async function
 
-const ExpressError = require("./utils/ExpressError.js"); //import Express constructor
+const ExpressError = require("./utils/ExpressError.js");                //import Express constructor
 const { Console } = require("console");
 
-const { listingSchema } = require("./Schema.js"); // import joi schema this schema will check
+const { listingSchema } = require("./Schema.js");                       // import joi schema this schema will check
 
 const validatetion = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
   console.log(error);
 
   if (error) {
-                                                          //here can created an middleware for checking validation
+                                                                         //here can created an middleware for checking validation
     let errMsg=error.details.map((el)=>el.message).join(",");
 
     throw ExpressError(344, errMsg);
@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
 
 //update route
 app.put(
-  "/listings/:id",validatetion,                                          //here was passed walidation as middleware it will validate than procide the next process       
+  "/listings/:id",                               // validatetion,                                       //here was passed walidation as middleware it will validate than procide the next process       
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let done = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
@@ -82,7 +82,7 @@ app.post(
     async (
       req,
       res,
-      next //here was added const validation thats created adove
+      next                                                //here was added const validation thats created adove
     ) => {
       // let {title,description,image,price,country}=req.body;
       let listing = req.body.listing;
@@ -107,7 +107,7 @@ app.post(
 // //line 72 or
 // if(!req.body.listing)
 // {
-//     throw new ExpressError(399,"listong not found");d   //it will return th ecustom error that eill display on the page
+//     throw new ExpressError(399,"listong not found");d      //it will return th ecustom error that eill display on the page
 // }else{
 //     //reaming code
 // }
@@ -169,18 +169,18 @@ main()
     console.log(err);
   });
 app.all("*", (req, res, next) => {
-  next(new ExpressError(404, "page not found")); // if path is out of servive the user degiend status and message will be passsed into a Expresserror class
+  next(new ExpressError(404, "page not found"));           // if path is out of servive the user degiend status and message will be passsed into a Expresserror class
 });
 
-// All request will go throw this route if ant errr will occcure this response will send
+                                                         // All request will go throw this route if ant errr will occcure this response will send
 app.use((err, req, res, next) => {
   let { statusCode = 400, message = "not found" } = err; //using == set deafult value to the variable
   // res.status(statusCode).send(message);               //it will show the error message only and statuscode in console
-  // res.send("something went wrong");          //new blank page res
+  // res.send("something went wrong");                    //new blank page res
   // res.render("./listings/error.ejs");
   res.status(504).render("./listings/error");
   console.log(message);
-  //POST http://localhost:8099/listings 504 (Gateway Timeout)
+                                                           //POST http://localhost:8099/listings 504 (Gateway Timeout)
   next();
 });
 

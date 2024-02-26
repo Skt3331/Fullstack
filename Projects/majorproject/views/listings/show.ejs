@@ -1,32 +1,61 @@
 <% layout("./layout/boilerplate.ejs") %>
 
     <div class="row mt-3">
-<div class="col-6 offset-2">
-    <h3>Listing details:</h3>
-    <div class="card">
-        <img src="<%= listing.image.url %>" class="card-img-top show-image" alt="Listing Iamge" >
-      </div> 
-      
-      <div class="card-body">
-          <h5 class="card-title"><%=listing.title %></h5>
-          <p class="card-text"><%=listing.description %></p>
-          
-          <%=listing.location %>
-          
-          <%=listing.country %>
+        <div class="col-6 offset-2">
+            <h3>Listing details:</h3>
+            <div class="card">
+                <img src="<%= listing.image.url %>" class="card-img-top show-image" alt="Listing Iamge">
+            </div>
 
-           
-           <br> &#x20B9 <%=listing.price.toLocaleString("en-in")%>
-         <br>
-          <a  class="btn btn-info col-1 show-btns" href="/listings/<%=listing._id%>/edit">edit</a> 
-         
+            <div class="card-body">
+                <h5 class="card-title">
+                    <%=listing.title %>
+                </h5>
+                <p class="card-text">
+                    <%=listing.description %>
+                </p>
 
-        <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+                <%=listing.location %>
 
-        <button class="btn btn-danger col-2 show-btns mt-3 mb-3"> Delete</button>
+                    <%=listing.country %>
+
+
+                        <br> &#x20B9 <%=listing.price.toLocaleString("en-in")%>
+                            <br>
+                            <a class="btn btn-info col-1 show-btns" href="/listings/<%=listing._id%>/edit">edit</a>
+
+
+                            <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+
+                                <button class="btn btn-danger col-2 show-btns mt-3 mb-3"> Delete</button>
+            </div>
         </div>
-    </div>
-   
-        </form> 
-    
+
+        </form>
+        <hr>
+
+        <div class="col-8 offset-2">
+            <h4>Leave Review</h4>
+            <form>
+                <div>
+                    <label for="rating" class="form-label">Rating</label>
+                    <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-control">
+                </div>
+                <div>
+                    <label for="comment" class="form-label">Comments</label>
+                    <textarea name="review[comment]" id="comment" cols="30" rows="10" class="form-control"></textarea>
+
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-dark">Add Comment</button>
+                </div>
+
+
+            </form>
+
+
+
+
+        </div>
+
     </div>
