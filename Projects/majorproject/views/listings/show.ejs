@@ -69,6 +69,10 @@
                     <div class="card-title"><b>User</b></div>
                     <div class="card-text"><%=review.comment %></div>
                     <div class="card-text"><%=review.rating %> Star</div>
+                    <div>
+                        <form action="/listings/<%= listing._id %>/review/<%= review._id %>?_method=delete" method="post">
+                        <button type="submit" class="btn btn-dark"> delete</button></form>
+                    </div>
                 </div>
                 </div>
                 <% } %>

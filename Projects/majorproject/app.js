@@ -85,7 +85,11 @@ app.post("/listings/:id/review", validateReview,wrapAsync(async (req, res) => {
   res.redirect(`/listings/${listing._id}`)
 }));
 
-
+app.delete("/listings/:id/review/:review_id",(req,res)=>
+{
+  res.send("review delete request
+  ")
+})
 
 
 app.get("/", (req, res) => {
