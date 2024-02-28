@@ -29,7 +29,8 @@ const { Console, error } = require("console");
 const { listingSchema , reviewSchema} = require("./Schema.js"); // import joi schema this schema will check
 
 
-const Review = require("./models/review.js");
+// const Review = require("./models/review.js");
+const review = require("./models/review.js");
 
 
 
@@ -76,7 +77,7 @@ const validateReview=(req,res,next)=>{
 app.post("/listings/:id/review", validateReview,wrapAsync(async (req, res) => {
   let listing = await Listing.findById(req.params.id);
   console.log(listing);
-  let newReview = new Review(req.body.review);
+  let newReview = new review(req.body.review);
   listing.review.push(newReview);
   await newReview.save();
   await listing.save();
@@ -85,10 +86,16 @@ app.post("/listings/:id/review", validateReview,wrapAsync(async (req, res) => {
   res.redirect(`/listings/${listing._id}`)
 }));
 
-app.delete("/listings/:id/review/:review_id",(req,res)=>
+app.delete("/listings/:id/review/:reviewid",async(req,res)=>
 {
-  res.send("review delete request
-  ")
+let {id,reviewid}=req.params;
+let deletedrvo =await Listing.findByIdAndUpdate(id,{$pull:{review:reviewid}});
+let deletedrw =await review.findByIdAndDelete(reviewid);
+console.log(deletedrvo,deletedrw);
+
+res.redirect(`/listings/${id}`);
+
+  
 })
 
 
