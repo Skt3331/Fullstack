@@ -37,6 +37,7 @@ const validateReview=(req,res,next)=>{
     await newReview.save();
     await listing.save();
     console.log("new review sent");
+    req.flash("sucess","new review added")
     // res.send("new review sent");
     res.redirect(`/listings/${listing._id}`)
   }));
@@ -49,7 +50,7 @@ const validateReview=(req,res,next)=>{
   let deletedrvo =await Listing.findByIdAndUpdate(id,{$pull:{review:reviewid}});  //detete review object from the listing 
   let deletedrw =await review.findByIdAndDelete(reviewid);
   // console.log(deletedrvo,deletedrw);
-  
+  req.flash("sucess","Review Deleted")
   res.redirect(`/listings/${id}`);
   
     

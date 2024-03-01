@@ -28,6 +28,30 @@ const { Console, error } = require("console");
 
 const { listingSchema , reviewSchema} = require("./Schema.js"); // import joi schema this schema will check
 
+//flash
+const flash=require("connect-flash");
+app.use(flash());
+
+//reqire session
+const session=require("express-session");
+
+// set session parameters
+app.use(session({
+  secret:"mycode",
+  resave:false,
+  saveUninitialized:true ,
+  cookie:{
+    expires:Date.now()+7*24*60*60*1000,  //this cookie will expire automatically and Date.now() return value in milisecounds
+    maxage:7*24*60*60*1000,
+    httpOnly:true,
+  }
+}));
+
+app.get("/",(req,res)=>
+{
+  res.send("suuning");
+})
+
 
 // const Review = require("./models/review.js");
 const review = require("./models/review.js");
@@ -36,6 +60,16 @@ const review = require("./models/review.js");
 
 const listing=require("./routes/listing.js");
 const reviews=require("./routes/review.js");
+
+
+// /this was created to flash the message and stoe inti locals
+app.use((req,res,next)=>
+{
+  res.locals.sucess=req.flash("sucess");
+  res.locals.error=req.flash("error");
+  next();
+});
+
 
 app.use("/listings",listing);
 
@@ -53,9 +87,6 @@ app.use("/listings/:id/review",reviews);
 
 
 
-app.get("/", (req, res) => {
-  res.send("runing");
-});
 
 
 
