@@ -11,7 +11,7 @@ const wrapAsync = require("../utils/wrapAsync.js"); //import wrap async function
 //validate review
 router.use(express.urlencoded({ extended: true }));
 
-
+const {isLoggedIn}=require("../middleware.js");
 
 const validateReview=(req,res,next)=>{
     let {error}=reviewSchema.validate(req.body);
@@ -29,7 +29,7 @@ const validateReview=(req,res,next)=>{
   
   
   // Reviews
- router.post("/", validateReview,wrapAsync(async (req, res) => {
+ router.post("/", validateReview,isLoggedIn,wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
     console.log(listing);
     let newReview = new review(req.body.review);
@@ -44,7 +44,7 @@ const validateReview=(req,res,next)=>{
 
   //delete review
   
- router.delete("/:reviewid",async(req,res)=>
+ router.delete("/:reviewid",isLoggedIn,async(req,res)=>
   {
   let {id,reviewid}=req.params;
   let deletedrvo =await Listing.findByIdAndUpdate(id,{$pull:{review:reviewid}});  //detete review object from the listing 

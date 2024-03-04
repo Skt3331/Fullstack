@@ -10,6 +10,7 @@ const ExpressError = require("../utils/ExpressError.js"); //import Express const
 
 const Listing = require("../models/listing.js");
 
+const {isLoggedIn}=require("../middleware.js");
 
 
 
@@ -76,7 +77,7 @@ router.post(
 
 
 router.put(
-  "/:id", // validatetion,                                       //here was passed walidation as middleware it will validate than procide the next process
+  "/:id",isLoggedIn, // validatetion,                                       //here was passed walidation as middleware it will validate than procide the next process
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let done = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
@@ -88,7 +89,7 @@ router.put(
 
 //delete routing
 router.delete(
-  "/:id",
+  "/:id",isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedlisting = await Listing.findByIdAndDelete(id);
@@ -111,7 +112,7 @@ router.delete(
 // }
 
 router.get(
-  "/new",
+  "/new",isLoggedIn,
   wrapAsync(async (req, res) => {
     res.render("listings/new.ejs");
   })
@@ -138,7 +139,7 @@ router.get(
 //forword to edit
 
 router.get( 
-  "/:id/edit",
+  "/:id/edit",isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
