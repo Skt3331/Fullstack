@@ -9,7 +9,7 @@ const wrapAsync = require("../utils/wrapAsync");
 const passport=require("passport");
 const { nextTick } = require("process");
 
-const {isLoggedIn}=require("../middleware.js");
+const {isLoggedIn,saveRedirectUrl}=require("../middleware.js");
 
 router.get("/login",(req,res)=>
 {
@@ -18,13 +18,16 @@ router.get("/login",(req,res)=>
 
 
 
-router.post("/login",passport.authenticate
+router.post("/login",saveRedirectUrl,passport.authenticate
 ("local",{failureRedirect:"/login",failureFlash:true})
 ,wrapAsync(async(req,res)=>
 {
    req.flash("sucess","welcome to wanderlust");
-   res.redirect("/listings")  
-}));
+  
+   res.redirect(res.locals.redirectUrl||"/listings")  //if res.locals.redirect is undefiend it will directly redirect to / listings
+   }
+
+ ));
 
 
 router.get("/logout",isLoggedIn,(req,res)=>

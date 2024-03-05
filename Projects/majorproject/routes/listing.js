@@ -51,7 +51,7 @@ router.post(
       next //here was added const validation thats created adove
     ) => {
       // let {title,description,image,price,country}=req.body;
-      let listing = req.body.listing;
+      // let listing = req.body.listing;
       // console.log(listing);\
 
       //  if(!newlisting.title|!newlisting.description|!newlisting.image|!newlisting.country|!newlisting.location)
@@ -64,6 +64,7 @@ router.post(
       // let result=listingSchema.validate(req.body);
       // console.log("result",result);
       const newlisting = new Listing(req.body.listing);
+      newlisting.owner=req.user._id;
       await newlisting.save();
       await newlisting.save();
       req.flash("sucess","new listing created;")
@@ -123,7 +124,7 @@ router.get(
   "/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id).populate("review");
+    const listing = await Listing.findById(id).populate("review").populate("owner");
     if(!listing)
     {
       req.flash("error","listing not exist");

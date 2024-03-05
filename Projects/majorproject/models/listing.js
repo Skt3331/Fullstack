@@ -27,7 +27,12 @@ const listingSchema = new Schema({
     {
       type:Schema.Types.ObjectId
       ,ref:"Review"    }
-  ]
+  ],
+  owner:
+  {
+    type:Schema.Types.ObjectId,
+    ref:"User"
+  }// added ownwe r to a listingS
 });
   ///it willl automaticaly delete the all reviews of specified listing when delete listing is callled
 listingSchema.post("findOneAndDelete",async(listing)=>

@@ -12,14 +12,19 @@
             <div class="card-body">
                
                 <p class="card-text">
+                  <i>Owned By:- <%=listing.owner.username %></i>  
+                  <br>
+                  <hr>
                     <%=listing.description %>
+
                 </p>
 
                 <%=listing.location %>
 
                     <%=listing.country %>
 
-
+<% if (curUser && curUser._id .equals(listing.owner._id)) {%>
+                 <div class="isauth">
                         <br> &#x20B9 <%=listing.price.toLocaleString("en-in")%>
                             <br>
                             <div><a class="btn btn-info show-btns" href="/listings/<%=listing._id%>/edit">edit</a>
@@ -30,6 +35,8 @@
 
                                     <button class="btn btn-danger show-btns mt-3 mb-3"> Delete</button>
                             </div>
+                        </div>    
+<% } %>  
 
             </div>
         </div>
