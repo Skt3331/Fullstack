@@ -36,7 +36,7 @@ const LocalStrategy = require("passport-local");
 
 const User =require("./models/user.js");
 
-
+const validation=require("./middleware.js");
 
 
 
@@ -74,19 +74,19 @@ passport.deserializeUser(User.deserializeUser());//remove info from session
 //   res.send("ruuning");
 // });
 
-app.get("/demouser",async(req,res)=>
-{
-  let fakeuser=new User(
-    {
-      email:"fake@gmail.com",
-      username:"fake"
-    }
-  );
- let regnew= await User.register(fakeuser,"pass@123");
- res.send(regnew);
+// app.get("/demouser",async(req,res)=>
+// {
+//   let fakeuser=new User(
+//     {
+//       email:"fake@gmail.com",
+//       username:"fake"
+//     }
+//   );
+//  let regnew= await User.register(fakeuser,"pass@123");
+//  res.send(regnew);
 
-// {"email":"fake@gmail.com","_id":"65e43a10143936256553f1e0","username":"fake","salt":"3fc791492dead91babab07b9f392f7f203f31ba6ecd126c72f2bfa0175cce57e","hash":"8fd733501833474e0b2ad41bb15e833ad859d42bb6b630ebcb9791798b8f6aaff813475b5d7c3cd39388cccd3d4cab3d4c3ead0d77935f1541a799e3fa1d99a96c98ace6f3b4d1437623cf86a95de0256667b50818239960f1c2058228ad029a6f8d442e0e51f660b1baa10b72c10c7b928f8b445fd3783604f4078bec4783a9071d0cff47869bbe1efa8860ae33988cec3f6090a22cd505fe39ae723eba319df6bd023535267234ac4d29c1fddf7a2ec7a891720f155aab373e368ccffa792cfad5254bc9809bdf5213babf8f3ee8d3d862354eceb510ce865988d086cf028a37471550a40bed65f67895683d2d67b70f33d672d043b6a5673ba64d186a11732219548ff3490e9d211fb99892e248b18b1b6559441c143dfb8b8a5bd7ae78084a0b8788bc3e939b4784a8f91f32c9765fc482897645e2fe6025dd093d33030da7b7e23dd323d919891466b5f5e34a6a013241d934cee36419f925097662ca7e09453579ba59d49145accaad4f03eca16add88ea73aebcfb24ac9a74cbeef061352d627c4c72ff3836824475e385458572cc58cf41bfe498721beab972b5e404c3cc9b4e41c617fb85d03f6a8f3cd31e3bbdd6686079d07be739b8d8b3316de355ddc4c5c933fffdbd772245d96fb8b7d4eb7632541cbca616822123bbc617993ef8ed542da633ecdfccdc3d84543ff7750fc1db3cd0b2ba73d8323bb0767c0a","__v":0}
-});
+// // {"email":"fake@gmail.com","_id":"65e43a10143936256553f1e0","username":"fake","salt":"3fc791492dead91babab07b9f392f7f203f31ba6ecd126c72f2bfa0175cce57e","hash":"8fd733501833474e0b2ad41bb15e833ad859d42bb6b630ebcb9791798b8f6aaff813475b5d7c3cd39388cccd3d4cab3d4c3ead0d77935f1541a799e3fa1d99a96c98ace6f3b4d1437623cf86a95de0256667b50818239960f1c2058228ad029a6f8d442e0e51f660b1baa10b72c10c7b928f8b445fd3783604f4078bec4783a9071d0cff47869bbe1efa8860ae33988cec3f6090a22cd505fe39ae723eba319df6bd023535267234ac4d29c1fddf7a2ec7a891720f155aab373e368ccffa792cfad5254bc9809bdf5213babf8f3ee8d3d862354eceb510ce865988d086cf028a37471550a40bed65f67895683d2d67b70f33d672d043b6a5673ba64d186a11732219548ff3490e9d211fb99892e248b18b1b6559441c143dfb8b8a5bd7ae78084a0b8788bc3e939b4784a8f91f32c9765fc482897645e2fe6025dd093d33030da7b7e23dd323d919891466b5f5e34a6a013241d934cee36419f925097662ca7e09453579ba59d49145accaad4f03eca16add88ea73aebcfb24ac9a74cbeef061352d627c4c72ff3836824475e385458572cc58cf41bfe498721beab972b5e404c3cc9b4e41c617fb85d03f6a8f3cd31e3bbdd6686079d07be739b8d8b3316de355ddc4c5c933fffdbd772245d96fb8b7d4eb7632541cbca616822123bbc617993ef8ed542da633ecdfccdc3d84543ff7750fc1db3cd0b2ba73d8323bb0767c0a","__v":0}
+// });
 
 
 

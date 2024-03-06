@@ -12,23 +12,12 @@ const Listing = require("../models/listing.js");
 
 const {isLoggedIn}=require("../middleware.js");
 
+const {isOwner}=require("../middleware.js");
+
+const {validatetion}=require("../middleware.js");
 
 
 
-  //validation
-const validatetion = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body);
-    console.log(error);
-  
-    if (error) {
-      //here can created an middleware for checking validation
-      let errMsg = error.details.map((el) => el.message).join(",");
-  
-      throw ExpressError(344, errMsg);
-    } else {
-      next();
-    }
-  };
 
 
 
@@ -78,26 +67,30 @@ router.post(
 
 
 router.put(
-  "/:id",isLoggedIn, // validatetion,                                       //here was passed walidation as middleware it will validate than procide the next process
+  "/:id",isLoggedIn,isOwner, // validatetion,                                       //here was passed walidation as middleware it will validate than procide the next process
   wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let done = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-    //  console.log(done);
+    let { id } = req.params;      let done = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+     console.log(done);
     req.flash("sucess","Listing updated")
-    res.redirect(`/listings/${id}`);
-  })
+    res.redirect(`/listings/`);
+    }
+    
+  )
 );
 
 //delete routing
 router.delete(
-  "/:id",isLoggedIn,
+  "/:id",isLoggedIn,isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    let deletedlisting = await Listing.findByIdAndDelete(id);
+     
+        let deletedlisting = await Listing.findByIdAndDelete(id);
     console.log(deletedlisting);
     req.flash("sucess","listing deleted");
     res.redirect("/listings");
-  })
+    }
+  
+  )
 );
 
 
@@ -124,7 +117,7 @@ router.get(
   "/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id).populate("review").populate("owner");
+    const listing = await Listing.findById(id).populate({path:"review",populate:"author"}).populate("owner");
     if(!listing)
     {
       req.flash("error","listing not exist");
@@ -140,7 +133,7 @@ router.get(
 //forword to edit
 
 router.get( 
-  "/:id/edit",isLoggedIn,
+  "/:id/edit",isLoggedIn,isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
